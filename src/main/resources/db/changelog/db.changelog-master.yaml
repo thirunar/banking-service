@@ -1,0 +1,28 @@
+databaseChangeLog:
+  -  preConditions:
+  -  runningAs:
+       username:  liquibase
+
+  -  changeSet:
+       id:  20210528092050
+       author:  thiru
+       changes:
+         -  createTable:
+              tableName:  account
+              columns:
+                -  column:
+                     name:  id
+                     type:  UUID
+                     constraints:
+                       primaryKey:  true
+                       nullable:  false
+                -  column:
+                     name:  balance
+                     type:  numeric(10, 2)
+                -  column:
+                     name:  created_on
+                     type:  timestamp
+                -  column:
+                     name:  last_modified_on
+                     type:  timestamp
+
