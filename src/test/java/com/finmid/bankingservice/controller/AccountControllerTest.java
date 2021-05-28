@@ -2,7 +2,7 @@ package com.finmid.bankingservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finmid.bankingservice.exceptions.AccountNotFoundException;
-import com.finmid.bankingservice.model.Account;
+import com.finmid.bankingservice.entity.Account;
 import com.finmid.bankingservice.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

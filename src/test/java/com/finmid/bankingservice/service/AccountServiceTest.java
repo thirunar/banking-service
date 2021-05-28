@@ -1,7 +1,7 @@
 package com.finmid.bankingservice.service;
 
 import com.finmid.bankingservice.exceptions.AccountNotFoundException;
-import com.finmid.bankingservice.model.Account;
+import com.finmid.bankingservice.entity.Account;
 import com.finmid.bankingservice.repository.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;

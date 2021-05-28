@@ -1,6 +1,6 @@
 package com.finmid.bankingservice.controller;
 
-import com.finmid.bankingservice.model.Account;
+import com.finmid.bankingservice.entity.Account;
 import com.finmid.bankingservice.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

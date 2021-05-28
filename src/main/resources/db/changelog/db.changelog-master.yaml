@@ -26,3 +26,29 @@ databaseChangeLog:
                      name:  last_modified_on
                      type:  timestamp
 
+  -  changeSet:
+       id:  20210528111630
+       author:  thiru
+       changes:
+         -  createTable:
+              tableName:  transaction
+              columns:
+                -  column:
+                     name:  txn_id
+                     type:  UUID
+                     constraints:
+                       primaryKey:  true
+                       nullable:  false
+                - column:
+                    name: amount
+                    type: numeric(10, 2)
+                -  column:
+                     name:  from_account_id
+                     type:  UUID
+                -  column:
+                     name:  to_account_id
+                     type:  UUID
+                -  column:
+                     name:  created_on
+                     type:  timestamp
+

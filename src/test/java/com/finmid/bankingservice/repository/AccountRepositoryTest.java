@@ -1,7 +1,7 @@
 package com.finmid.bankingservice.repository;
 
 import com.finmid.bankingservice.ContainerInitializer;
-import com.finmid.bankingservice.model.Account;
+import com.finmid.bankingservice.entity.Account;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

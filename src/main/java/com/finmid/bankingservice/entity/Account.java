@@ -1,4 +1,4 @@
-package com.finmid.bankingservice.model;
+package com.finmid.bankingservice.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
