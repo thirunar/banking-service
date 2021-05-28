@@ -32,40 +32,27 @@ class TransactionServiceTest {
     private TransactionRepository repository;
 
     @Test
-    void shouldFetchFromAndToAccount() {
-        TransactionDto request = TransactionDto.builder()
-                .fromAccountId(UUID.randomUUID())
-                .toAccountId(UUID.randomUUID())
-                .build();
-        when(repository.save(any())).thenReturn(Transaction.builder().txnId(UUID.randomUUID())
-                .amount(request.getAmount())
-                .fromAccount(Account.builder().id(request.getFromAccountId()).build())
-                .toAccount(Account.builder().id(request.getToAccountId()).build()).build());
-
-        service.createTransaction(request);
-
-        verify(accountService).getAccount(request.getFromAccountId());
-        verify(accountService).getAccount(request.getToAccountId());
-    }
-
-    @Test
-    void shouldSaveTheTransaction() {
+    void shouldSaveTheTransactionWithUpdatedBalance() {
         TransactionDto request = TransactionDto.builder()
                 .fromAccountId(UUID.randomUUID())
                 .toAccountId(UUID.randomUUID())
                 .amount(new BigDecimal("100"))
                 .build();
-        Account fromAccount = Account.builder().id(request.getFromAccountId()).build();
-        Account toAccount = Account.builder().id(request.getToAccountId()).build();
+        Account fromAccount = Account.builder().id(request.getFromAccountId()).balance(new BigDecimal("500.00")).build();
+        Account toAccount = Account.builder().id(request.getToAccountId()).balance(new BigDecimal("500.00")).build();
         when(accountService.getAccount(any())).thenReturn(fromAccount, toAccount);
         when(repository.save(any())).thenReturn(Transaction.builder().txnId(UUID.randomUUID())
                 .amount(request.getAmount()).fromAccount(fromAccount).toAccount(toAccount).build());
 
         TransactionDto transaction = service.createTransaction(request);
 
+        verify(accountService).getAccount(request.getFromAccountId());
+        verify(accountService).getAccount(request.getToAccountId());
         verify(repository).save(argThat(t -> {
             assertThat(t.getFromAccount().getId()).isEqualTo(request.getFromAccountId());
+            assertThat(t.getFromAccount().getBalance()).isEqualTo(new BigDecimal("400.00"));
             assertThat(t.getToAccount().getId()).isEqualTo(request.getToAccountId());
+            assertThat(t.getToAccount().getBalance()).isEqualTo(new BigDecimal("600.00"));
             assertThat(t.getAmount()).isEqualTo(request.getAmount());
             return true;
         }));

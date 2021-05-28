@@ -34,7 +34,7 @@ public class Account {
     @Builder.Default
     private BigDecimal balance = new BigDecimal("100000.00");
 
-    private LocalDateTime createOn;
+    private LocalDateTime createdOn;
 
     private LocalDateTime lastModifiedOn;
 
@@ -45,7 +45,15 @@ public class Account {
 
     @PrePersist
     public void prePersist() {
-        createOn = LocalDateTime.now();
+        createdOn = LocalDateTime.now();
+    }
+
+    public void credit(BigDecimal amount) {
+        balance = balance.add(amount);
+    }
+
+    public void debit(BigDecimal amount) {
+        balance = balance.subtract(amount);
     }
 
 }

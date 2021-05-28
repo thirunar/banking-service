@@ -24,25 +24,28 @@ class TransactionRepositoryTest {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    private AccountRepository repository;
+    private AccountRepository accountRepository;
 
     private Account fromAccount;
     private Account toAccount;
 
     @BeforeEach
     void setUp() {
-        fromAccount = repository.save(Account.builder().build());
-        toAccount = repository.save(Account.builder().balance(new BigDecimal("5000.00")).build());
+        fromAccount = accountRepository.save(Account.builder().balance(new BigDecimal("10000.00")).build());
+        toAccount = accountRepository.save(Account.builder().balance(new BigDecimal("5000.00")).build());
     }
 
     @Test
     void shouldSaveATransaction() {
-        Transaction transaction = Transaction.builder().amount(new BigDecimal("100")).fromAccount(fromAccount)
+        Transaction transaction = Transaction.builder().amount(new BigDecimal("100"))
+                .fromAccount(fromAccount.toBuilder().balance(new BigDecimal("9900.00")).build())
+                .toAccount(toAccount.toBuilder().balance(new BigDecimal("10100.00")).build())
                 .toAccount(toAccount).build();
 
         Transaction savedTransaction = transactionRepository.save(transaction);
 
         assertThat(savedTransaction.getTxnId()).isNotNull();
-        assertThat(savedTransaction.getCreateOn()).isNotNull();
+        assertThat(savedTransaction.getCreatedOn()).isNotNull();
     }
+
 }

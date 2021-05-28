@@ -52,3 +52,18 @@ databaseChangeLog:
                      name:  created_on
                      type:  timestamp
 
+         - addForeignKeyConstraint:
+             baseColumnNames: from_account_id
+             baseTableName: transaction
+             constraintName: fk_from_account_id
+             referencedColumnNames: id
+             referencedTableName: account
+             validate: true
+
+         - addForeignKeyConstraint:
+             baseColumnNames: to_account_id
+             baseTableName: transaction
+             constraintName: fk_to_account_id
+             referencedColumnNames: id
+             referencedTableName: account
+             validate: true

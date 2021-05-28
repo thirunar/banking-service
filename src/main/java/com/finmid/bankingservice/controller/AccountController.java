@@ -24,7 +24,7 @@ public class AccountController {
     private final AccountService service;
 
     @PostMapping(path = ACCOUNT_PATH)
-    public ResponseEntity createAccount(@RequestBody Account account) {
+    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
         Account savedAccount = service.createAccount(account);
 
         return ResponseEntity.created(URI.create(get(ACCOUNT_PATH, savedAccount.getId().toString()).toString())).build();

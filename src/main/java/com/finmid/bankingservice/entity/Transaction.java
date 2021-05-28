@@ -32,21 +32,21 @@ public class Transaction {
     private UUID txnId;
 
     @ManyToOne
-    @JoinColumn(name = "from_account_id")
+    @JoinColumn(name = "from_account_id", insertable = false)
     private Account fromAccount;
 
     @ManyToOne
-    @JoinColumn(name = "to_account_id")
+    @JoinColumn(name = "to_account_id", insertable = false)
     private Account toAccount;
 
     @Column(name = "amount")
     private BigDecimal amount;
 
-    private LocalDateTime createOn;
+    private LocalDateTime createdOn;
 
     @PrePersist
     public void prePersist() {
-        createOn = LocalDateTime.now();
+        createdOn = LocalDateTime.now();
     }
 
 }

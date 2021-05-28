@@ -21,6 +21,7 @@ class AccountRepositoryTest {
     @Autowired
     private AccountRepository repository;
 
+
     @Test
     void shouldStoreAccountWithPredefinedBalance() {
 
@@ -28,7 +29,7 @@ class AccountRepositoryTest {
 
         assertThat(savedAccount.getBalance()).isEqualByComparingTo(new BigDecimal("100000.00"));
         assertThat(savedAccount.getId()).isNotNull();
-        assertThat(savedAccount.getCreateOn()).isNotNull();
+        assertThat(savedAccount.getCreatedOn()).isNotNull();
         assertThat(savedAccount.getLastModifiedOn()).isNull();
     }
 }
