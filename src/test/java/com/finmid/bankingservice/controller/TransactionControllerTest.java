@@ -2,7 +2,7 @@ package com.finmid.bankingservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finmid.bankingservice.dto.TransactionDto;
-import com.finmid.bankingservice.service.TransactionService;
+import com.finmid.bankingservice.service.TransferService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,13 +26,13 @@ class TransactionControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TransactionService transactionService;
+    private TransferService transferService;
 
     @Test
     void shouldCreateATransaction() throws Exception {
         TransactionDto request = TransactionDto.builder().build();
         UUID id = UUID.randomUUID();
-        when(transactionService.createTransaction(any())).thenReturn(request.toBuilder().txnId(id).build());
+        when(transferService.createTransaction(any())).thenReturn(request.toBuilder().txnId(id).build());
 
         mockMvc.perform(post("/v1/transaction")
                 .content(new ObjectMapper().writeValueAsString(request))
@@ -40,7 +40,7 @@ class TransactionControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/v1/transaction/" + id));
 
-        verify(transactionService).createTransaction(request);
+        verify(transferService).createTransaction(request);
     }
 
 }

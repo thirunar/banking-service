@@ -62,4 +62,30 @@ class AccountServiceTest {
 
         verify(repository).findById(id);
     }
+
+    @Test
+    void shouldDebitFromAccount() {
+        UUID id = UUID.randomUUID();
+        Account account = Account.builder()
+                .id(id).balance(new BigDecimal("100000.00"))
+                .build();
+        when(repository.findById(any())).thenReturn(Optional.of(account));
+
+        Account debitAccount = accountService.debit(id, new BigDecimal("10"));
+
+        assertThat(debitAccount.getBalance()).isEqualTo(new BigDecimal("99990.00"));
+    }
+
+    @Test
+    void shouldCreditFromAccount() {
+        UUID id = UUID.randomUUID();
+        Account account = Account.builder()
+                .id(id).balance(new BigDecimal("100000.00"))
+                .build();
+        when(repository.findById(any())).thenReturn(Optional.of(account));
+
+        Account creditAccount = accountService.credit(id, new BigDecimal("10"));
+
+        assertThat(creditAccount.getBalance()).isEqualTo(new BigDecimal("100010.00"));
+    }
 }

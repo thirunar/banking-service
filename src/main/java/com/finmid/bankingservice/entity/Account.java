@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -33,6 +34,9 @@ public class Account {
     @Column(name = "balance")
     @Builder.Default
     private BigDecimal balance = new BigDecimal("100000.00");
+
+    @Version
+    private Integer version;
 
     private LocalDateTime createdOn;
 

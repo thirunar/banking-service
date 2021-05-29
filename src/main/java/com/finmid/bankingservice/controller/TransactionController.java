@@ -1,7 +1,7 @@
 package com.finmid.bankingservice.controller;
 
 import com.finmid.bankingservice.dto.TransactionDto;
-import com.finmid.bankingservice.service.TransactionService;
+import com.finmid.bankingservice.service.TransferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 public class TransactionController {
 
     private static final String TRANSACTION_PATH = "/v1/transaction";
-    private final TransactionService service;
+    private final TransferService service;
 
     @PostMapping(path = TRANSACTION_PATH)
     public ResponseEntity<TransactionDto> createTransaction(@RequestBody TransactionDto transactionDto) {
