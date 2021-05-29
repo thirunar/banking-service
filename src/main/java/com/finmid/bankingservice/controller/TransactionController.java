@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.nio.file.Paths;
 
@@ -19,7 +20,7 @@ public class TransactionController {
     private final TransferService service;
 
     @PostMapping(path = TRANSACTION_PATH)
-    public ResponseEntity<TransactionDto> createTransaction(@RequestBody TransactionDto transactionDto) {
+    public ResponseEntity<TransactionDto> createTransaction(@Valid @RequestBody TransactionDto transactionDto) {
 
         TransactionDto savedTransaction = service.createTransaction(transactionDto);
 

@@ -10,10 +10,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -30,7 +32,7 @@ class TransactionControllerTest {
 
     @Test
     void shouldCreateATransaction() throws Exception {
-        TransactionDto request = TransactionDto.builder().build();
+        TransactionDto request = TransactionDto.builder().fromAccountId(UUID.randomUUID()).toAccountId(UUID.randomUUID()).amount(BigDecimal.TEN).build();
         UUID id = UUID.randomUUID();
         when(transferService.createTransaction(any())).thenReturn(request.toBuilder().txnId(id).build());
 
@@ -41,6 +43,19 @@ class TransactionControllerTest {
                 .andExpect(header().string("Location", "/v1/transaction/" + id));
 
         verify(transferService).createTransaction(request);
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenFromAndToAccountsAreSame() throws Exception {
+        UUID id = UUID.randomUUID();
+        TransactionDto request = TransactionDto.builder().fromAccountId(id).toAccountId(id).build();
+
+        mockMvc.perform(post("/v1/transaction")
+                .content(new ObjectMapper().writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(transferService);
     }
 
 }
