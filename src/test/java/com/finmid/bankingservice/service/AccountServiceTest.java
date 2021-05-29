@@ -2,6 +2,7 @@ package com.finmid.bankingservice.service;
 
 import com.finmid.bankingservice.exceptions.AccountNotFoundException;
 import com.finmid.bankingservice.entity.Account;
+import com.finmid.bankingservice.exceptions.InsufficientBalanceException;
 import com.finmid.bankingservice.repository.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,6 +75,20 @@ class AccountServiceTest {
         Account debitAccount = accountService.debit(id, new BigDecimal("10"));
 
         assertThat(debitAccount.getBalance()).isEqualTo(new BigDecimal("99990.00"));
+    }
+
+    @Test
+    void shouldThrowInsufficientBalanceExceptionWhenTheBalanceIsLessThanTheDebitAmount() {
+        UUID id = UUID.randomUUID();
+        Account account = Account.builder()
+                .id(id).balance(new BigDecimal("100.00"))
+                .build();
+        when(repository.findById(any())).thenReturn(Optional.of(account));
+
+        assertThatExceptionOfType(InsufficientBalanceException.class)
+                .isThrownBy(() -> accountService.debit(id, new BigDecimal("101")));
+
+
     }
 
     @Test

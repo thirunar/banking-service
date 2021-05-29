@@ -2,6 +2,7 @@ package com.finmid.bankingservice.service;
 
 import com.finmid.bankingservice.entity.Account;
 import com.finmid.bankingservice.exceptions.AccountNotFoundException;
+import com.finmid.bankingservice.exceptions.InsufficientBalanceException;
 import com.finmid.bankingservice.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,11 @@ public class AccountService {
     @Transactional(propagation = REQUIRES_NEW)
     public Account debit(UUID accountId, BigDecimal amount) {
         Account account = getAccount(accountId);
+
+        if (account.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientBalanceException();
+        }
+
         account.debit(amount);
         return account;
     }
