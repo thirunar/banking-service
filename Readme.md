@@ -28,9 +28,9 @@ mvn spring-boot:run
 ```
 ## Implementation
 * The account and transaction details are stored in the postgres database
-* When the account is been created, the user can either give the balance or the default value will be assigned
-* When the transaction is initiated, the account balances are updated and added `transaction` table acts as a ledger
-* To handle concurrent transaction and also to avoid concurrency issues, optimistic locking is used when the transaction is done
+* When an account is created, user can either give the balance or a default balance is assigned
+* When a transaction is initiated, account balances are updated and entry is added to `transaction` table which acts as a ledger
+* To handle concurrent transactions, optimistic locking is used
 
 ## CI
 [Here](https://github.com/thirunar/banking-service/actions)
@@ -42,5 +42,5 @@ mvn spring-boot:run
 [Here](http://localhost:8080/swagger-ui.html)
 
 ## Project Board
-[Here](https://github.com/thirunar/banking-service/projects)
+[Here](https://github.com/thirunar/banking-service/projects/1)
 

@@ -18,15 +18,15 @@ import java.util.function.BiFunction;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TransferService {
+public class TransactionService {
 
-    private final Integer MAX_RETRY = 10;
+    private static final Integer MAXIMUM_NUMBER_OF_RETRIES = 10;
 
     private final TransactionRepository repository;
     private final AccountService accountService;
 
     @Transactional
-    public TransactionDto createTransaction(TransactionDto transaction) {
+    public TransactionDto transfer(TransactionDto transaction) {
 
         Transaction txn = Transaction.builder()
                 .fromAccount(updateBalance(transaction.getFromAccountId(), transaction.getAmount(), accountService::debit))
@@ -35,13 +35,12 @@ public class TransferService {
 
         Transaction savedTransaction = repository.save(txn);
 
-        log.info("Transfer Completed: {}", savedTransaction);
         return TransactionDto.fromTransaction(savedTransaction);
     }
 
     private Account updateBalance(UUID accountId, BigDecimal amount, BiFunction<UUID, BigDecimal, Account> function) {
         int counter = 0;
-        while (counter < MAX_RETRY) {
+        while (counter < MAXIMUM_NUMBER_OF_RETRIES) {
             try {
                 counter++;
                 return function.apply(accountId, amount);

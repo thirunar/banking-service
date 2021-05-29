@@ -1,5 +1,6 @@
 package com.finmid.bankingservice.service;
 
+import com.finmid.bankingservice.dto.AccountDto;
 import com.finmid.bankingservice.entity.Account;
 import com.finmid.bankingservice.exceptions.AccountNotFoundException;
 import com.finmid.bankingservice.exceptions.InsufficientBalanceException;
@@ -21,7 +22,7 @@ public class AccountService {
     private final AccountRepository repository;
 
     public Account createAccount(Account account) {
-        return repository.save(account);
+        return repository.save(Account.builder().balance(account.getBalance()).build());
     }
 
     public Account getAccount(UUID id) {

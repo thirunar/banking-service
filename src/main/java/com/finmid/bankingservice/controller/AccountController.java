@@ -1,5 +1,6 @@
 package com.finmid.bankingservice.controller;
 
+import com.finmid.bankingservice.dto.AccountDto;
 import com.finmid.bankingservice.entity.Account;
 import com.finmid.bankingservice.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.UUID;
 
@@ -24,14 +26,14 @@ public class AccountController {
     private final AccountService service;
 
     @PostMapping(path = ACCOUNT_PATH)
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        Account savedAccount = service.createAccount(account);
+    public ResponseEntity<Account> createAccount(@Valid @RequestBody AccountDto account) {
+        Account savedAccount = service.createAccount(Account.fromDto(account));
 
         return ResponseEntity.created(URI.create(get(ACCOUNT_PATH, savedAccount.getId().toString()).toString())).build();
     }
 
     @GetMapping(path = ACCOUNT_PATH + "/{id}")
-    public Account getAccount(@PathVariable UUID id) {
-        return service.getAccount(id);
+    public AccountDto getAccount(@PathVariable UUID id) {
+        return AccountDto.fromAccount(service.getAccount(id));
     }
 }

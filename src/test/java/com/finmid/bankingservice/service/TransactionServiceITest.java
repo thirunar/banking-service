@@ -5,8 +5,6 @@ import com.finmid.bankingservice.dto.TransactionDto;
 import com.finmid.bankingservice.entity.Account;
 import com.finmid.bankingservice.repository.AccountRepository;
 import com.finmid.bankingservice.repository.TransactionRepository;
-import com.finmid.bankingservice.service.AccountService;
-import com.finmid.bankingservice.service.TransferService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,10 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ContextConfiguration(initializers = ContainerInitializer.class)
-class TransferServiceITest {
+class TransactionServiceITest {
 
     @Autowired
-    private TransferService service;
+    private TransactionService service;
 
     @Autowired
     private AccountService accountService;
@@ -50,14 +48,14 @@ class TransferServiceITest {
     }
 
     @Test
-    void shouldSaveTheTransactionWithUpdatedBalance() {
+    void shouldSaveTheTransactionAndUpdateAccountBalance() {
         TransactionDto request = TransactionDto.builder()
                 .fromAccountId(firstAccount.getId())
                 .toAccountId(secondAccount.getId())
                 .amount(new BigDecimal("100"))
                 .build();
 
-        TransactionDto transaction = service.createTransaction(request);
+        TransactionDto transaction = service.transfer(request);
 
         assertThat(transaction.getTxnId()).isNotNull();
 
@@ -71,7 +69,7 @@ class TransferServiceITest {
     }
 
     @Test
-    void shouldUpdateTheBalancesOfAccountWithOptimisticLock() throws InterruptedException {
+    void shouldUpdateTheBalancesOfAccountWithOptimisticLockOnConcurrentTransfers() throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(5);
         TransactionDto request = TransactionDto.builder()
                 .fromAccountId(firstAccount.getId())
@@ -85,8 +83,8 @@ class TransferServiceITest {
                 .build();
 
         for (int index = 0; index < 5; index++) {
-            executor.execute(() -> service.createTransaction(request));
-            executor.execute(() -> service.createTransaction(anotherRequest));
+            executor.execute(() -> service.transfer(request));
+            executor.execute(() -> service.transfer(anotherRequest));
         }
 
         executor.shutdown();

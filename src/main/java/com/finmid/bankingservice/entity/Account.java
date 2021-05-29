@@ -1,7 +1,6 @@
 package com.finmid.bankingservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.finmid.bankingservice.dto.AccountDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,17 +33,13 @@ public class Account {
     private UUID id;
 
     @Column(name = "balance")
-    @Builder.Default
-    private BigDecimal balance = new BigDecimal("100000.00");
+    private BigDecimal balance;
 
     @Version
-    @JsonIgnore
     private Integer version;
 
-    @JsonIgnore
     private LocalDateTime createdOn;
 
-    @JsonIgnore
     private LocalDateTime lastModifiedOn;
 
     @PreUpdate
@@ -63,6 +58,13 @@ public class Account {
 
     public void debit(BigDecimal amount) {
         balance = balance.subtract(amount);
+    }
+
+    public static Account fromDto(AccountDto dto) {
+        return Account.builder()
+                .id(dto.getId())
+                .balance(dto.getBalance())
+                .build();
     }
 
 }
