@@ -27,6 +27,7 @@ public class TransferService {
 
     @Transactional
     public TransactionDto createTransaction(TransactionDto transaction) {
+
         Transaction txn = Transaction.builder()
                 .fromAccount(updateBalance(transaction.getFromAccountId(), transaction.getAmount(), accountService::debit))
                 .toAccount(updateBalance(transaction.getToAccountId(), transaction.getAmount(), accountService::credit))
@@ -34,6 +35,7 @@ public class TransferService {
 
         Transaction savedTransaction = repository.save(txn);
 
+        log.info("Transfer Completed: {}", savedTransaction);
         return TransactionDto.fromTransaction(savedTransaction);
     }
 

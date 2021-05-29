@@ -1,5 +1,6 @@
-package com.finmid.bankingservice;
+package com.finmid.bankingservice.service;
 
+import com.finmid.bankingservice.ContainerInitializer;
 import com.finmid.bankingservice.dto.TransactionDto;
 import com.finmid.bankingservice.entity.Account;
 import com.finmid.bankingservice.repository.AccountRepository;
@@ -25,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ContextConfiguration(initializers = ContainerInitializer.class)
-class BankingServiceITest {
+class TransferServiceITest {
 
     @Autowired
     private TransferService service;
